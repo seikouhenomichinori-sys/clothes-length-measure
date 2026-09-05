@@ -8,15 +8,22 @@ import './GuideFrame.css';
 export function GuideFrame() {
   return (
     <div
-      className="guide-frame"
+      className="guide-frame-wrap"
       style={{
-        width: GUIDE_FRAME_WIDTH_PX,
-        height: GUIDE_FRAME_HEIGHT_PX,
         left: GUIDE_FRAME_MARGIN_PX,
         bottom: GUIDE_FRAME_MARGIN_PX,
       }}
     >
-      <span className="guide-frame__label">カードを合わせてください</span>
+      <span className="guide-frame-wrap__label">
+        服とカードは同じ高さに置いてください
+      </span>
+      <div
+        className="guide-frame"
+        style={{
+          width: GUIDE_FRAME_WIDTH_PX,
+          height: GUIDE_FRAME_HEIGHT_PX,
+        }}
+      />
     </div>
   );
 }
