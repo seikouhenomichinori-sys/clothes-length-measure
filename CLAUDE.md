@@ -74,3 +74,19 @@ index.html
 5. 自動トリミングと保存確認フロー
 
 大きな設計判断が必要な場面では、実装前に必ずプランを提示し合意を得る。
+
+## GitHub連携
+
+- **アカウント**: `seikouhenomichinori-sys`(`gh` CLIに複数アカウントが登録されている場合があるため、操作前に `gh auth status` でActive accountを確認すること)
+- **リポジトリ**: https://github.com/seikouhenomichinori-sys/clothes-length-measure (Public)
+  - GitHub Pagesを無料プランで使うためにPublicにしている。プライベートに戻すとPagesでの公開は無料プランでは不可
+- **公開URL(GitHub Pages)**: https://seikouhenomichinori-sys.github.io/clothes-length-measure/
+  - `main` ブランチへのpushをトリガーに `.github/workflows/deploy.yml` が自動でビルド&デプロイする(手動操作不要)
+  - `vite.config.ts` の `base` はビルド時のみ `/clothes-length-measure/` になる設定にしてある(プロジェクトページ配信のため)。リポジトリ名を変更する場合はここも合わせて変更すること
+- **必要な `gh` 認証スコープ**: `repo`(push全般)、`workflow`(`.github/workflows/` 配下の変更をpushするため)、`codespace`(Codespacesを使う場合)。不足時は `gh auth refresh -h github.com -s <scope>` で追加できる
+- **複数アカウント使用時の注意**: macOSキーチェーンに他アカウント(`kasakiayumumain`)の資格情報が残っていると、`git push` がその資格情報を誤って使い `Repository not found` エラーになることがある。このリポジトリでは対策として、リポジトリローカルの `credential.helper` を `gh auth git-credential` のみに上書き設定済み(グローバル設定やキーチェーンには影響しない)。別環境でこのリポジトリをcloneした場合は同様の設定が必要になることがある。
+- **GitHub Codespaces(実機動作確認用)**: スマホ実機でHTTPS環境の動作確認をしたい場合に使用。
+  - `gh codespace create --repo seikouhenomichinori-sys/clothes-length-measure --machine basicLinux32gb`
+  - `gh codespace ssh -c <name> -- "cd /workspaces/clothes-length-measure && npm install && npm run dev -- --host 0.0.0.0"`
+  - ポートの自動転送URL(`https://xxxx-5173.app.github.dev`)は `gh` CLIだけでは発行できない(VS Code側のクライアント接続でポート検出がトリガーされる仕組みのため)。スマホのブラウザで `https://<codespace-name>.github.dev` を開いてVS Code Web経由でポート転送を検出させ、ポートパネルから開く必要がある
+  - 使い終わったら課金防止のため `gh codespace stop -c <name>` または `gh codespace delete -c <name>` で停止/削除すること
