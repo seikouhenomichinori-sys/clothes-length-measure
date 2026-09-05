@@ -24,7 +24,7 @@ type ReviewState = {
 };
 
 function App() {
-  const { videoRef, isReady, error } = useCamera();
+  const { videoRef, videoCallbackRef, isReady, error } = useCamera();
   const [review, setReview] = useState<ReviewState | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -39,6 +39,7 @@ function App() {
   const handleShutter = () => {
     const video = videoRef.current;
     if (!video) return;
+    if (video.videoWidth === 0 || video.videoHeight === 0) return;
 
     const containerRect = video.getBoundingClientRect();
     const guideFrameRect = getGuideFrameRect(containerRect.height);
@@ -130,12 +131,20 @@ function App() {
           onSave={handleSave}
         />
       ) : (
-        <>
-          <CameraPreview videoRef={videoRef} isReady={isReady} error={error} />
-          <GuideFrame />
-          <MenuBar />
-          <ShutterButton onShutter={handleShutter} />
-        </>
+        <div className="camera-screen">
+          <div className="camera-screen__preview">
+            <CameraPreview
+              videoCallbackRef={videoCallbackRef}
+              isReady={isReady}
+              error={error}
+            />
+            <GuideFrame />
+            <MenuBar />
+          </div>
+          <div className="camera-screen__bottom-bar">
+            <ShutterButton onShutter={handleShutter} />
+          </div>
+        </div>
       )}
       {toastMessage && <div className="toast">{toastMessage}</div>}
     </div>

@@ -1,23 +1,41 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 type CameraState = {
   videoRef: React.RefObject<HTMLVideoElement | null>;
+  videoCallbackRef: (node: HTMLVideoElement | null) => void;
   isReady: boolean;
   error: string | null;
 };
 
 export function useCamera(): CameraState {
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
   const [isReady, setIsReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const attachStream = useCallback((video: HTMLVideoElement) => {
+    const stream = streamRef.current;
+    if (!stream) return;
+    video.srcObject = stream;
+    video.play().catch(() => {});
+  }, []);
+
+  // <video>要素は撮影確認画面の表示/非表示に伴って再マウントされるため、
+  // plain な ref ではなくコールバックrefで検知し、都度ストリームを再接続する
+  const videoCallbackRef = useCallback(
+    (node: HTMLVideoElement | null) => {
+      videoRef.current = node;
+      if (node) attachStream(node);
+    },
+    [attachStream],
+  );
+
   useEffect(() => {
     let cancelled = false;
-    let stream: MediaStream | null = null;
 
     async function start() {
       try {
-        stream = await navigator.mediaDevices.getUserMedia({
+        const stream = await navigator.mediaDevices.getUserMedia({
           video: {
             facingMode: 'environment',
             width: { ideal: 1920 },
@@ -31,12 +49,11 @@ export function useCamera(): CameraState {
           return;
         }
 
-        const video = videoRef.current;
-        if (video) {
-          video.srcObject = stream;
-          await video.play();
-          setIsReady(true);
+        streamRef.current = stream;
+        if (videoRef.current) {
+          attachStream(videoRef.current);
         }
+        setIsReady(true);
       } catch (err) {
         if (!cancelled) {
           setError(
@@ -50,9 +67,10 @@ export function useCamera(): CameraState {
 
     return () => {
       cancelled = true;
-      stream?.getTracks().forEach((track) => track.stop());
+      streamRef.current?.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
     };
-  }, []);
+  }, [attachStream]);
 
-  return { videoRef, isReady, error };
+  return { videoRef, videoCallbackRef, isReady, error };
 }

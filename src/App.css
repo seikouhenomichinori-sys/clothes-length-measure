@@ -4,6 +4,28 @@
   overflow: hidden;
 }
 
+.camera-screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.camera-screen__preview {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.camera-screen__bottom-bar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 110px;
+  background: #111;
+}
+
 .toast {
   position: absolute;
   top: 50%;

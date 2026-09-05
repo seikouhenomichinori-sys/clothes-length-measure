@@ -1,17 +1,16 @@
-import type { RefObject } from 'react';
 import './CameraPreview.css';
 
 type Props = {
-  videoRef: RefObject<HTMLVideoElement | null>;
+  videoCallbackRef: (node: HTMLVideoElement | null) => void;
   isReady: boolean;
   error: string | null;
 };
 
-export function CameraPreview({ videoRef, isReady, error }: Props) {
+export function CameraPreview({ videoCallbackRef, isReady, error }: Props) {
   return (
     <div className="camera-preview">
       <video
-        ref={videoRef}
+        ref={videoCallbackRef}
         className="camera-preview__video"
         playsInline
         muted
