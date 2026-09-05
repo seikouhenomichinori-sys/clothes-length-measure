@@ -1,0 +1,13 @@
+.measurement-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.measurement-overlay__line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #ff3b30;
+}

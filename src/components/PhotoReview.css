@@ -1,0 +1,87 @@
+.photo-review {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photo-review__image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.photo-review__result {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 8px 16px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.photo-review__result--error {
+  font-size: 13px;
+  font-weight: 400;
+  color: #ffd4d0;
+  max-width: 80%;
+}
+
+.photo-review__debug {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  color: #fff;
+  font-size: 12px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.photo-review__actions {
+  position: absolute;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+}
+
+.photo-review__button {
+  padding: 10px 24px;
+  border-radius: 24px;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.photo-review__button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.photo-review__button--secondary {
+  background: rgba(255, 255, 255, 0.85);
+  color: #111;
+}
+
+.photo-review__button--secondary:active {
+  background: #ddd;
+}
+
+.photo-review__button--primary {
+  background: #ff3b30;
+  color: #fff;
+  font-weight: 600;
+}
+
+.photo-review__button--primary:active {
+  background: #d92d23;
+}
